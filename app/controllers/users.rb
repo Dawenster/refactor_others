@@ -4,11 +4,15 @@ end
 
 post '/signup' do
   @user = User.new(params[:user])
-  unless @user.save
-    # errors
+  
+  
+  if @user.save
+    set_sessions(@user)
+    redirect "/profile"
+  else
+    # error handling
+    erb :signup
   end
-  authenticate(@user.email, params[:user][:password])
-  redirect "/profile"
 end
 
 get '/login' do
@@ -16,8 +20,14 @@ get '/login' do
 end
 
 post '/login' do
-  authenticate(params[:email], params[:password])
-  redirect '/profile'
+  @user = User.authenticate(params[:email], params[:password])
+  if @user
+    set_sessions(@user)
+    redirect "/profile"
+  else
+    @error = "You need to supply an email and password that ACTUALLY match"
+    erb :login
+  end
 end
 
 get '/logout' do

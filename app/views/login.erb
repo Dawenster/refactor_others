@@ -1,6 +1,11 @@
 <link rel="stylesheet" href="/css/login_signup.css">
 <div class="content">
 
+  <% if @error %>
+  <p><%= @error %></p>
+  <% end %> 
+
+
 <form id="login" action="/login" method="post">
     <fieldset class = "logon">
       <legend>Log On</legend>
